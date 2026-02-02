@@ -11,11 +11,8 @@ const options = {
       description: "API documentation for Student Management System API",
     },
     servers: [
-      // {
-      //   url: "https://qa-student-management-system.vercel.app/",
-      // },
       {
-        url: "http://localhost:5171",
+        url: "http://54.255.195.111:5171",
       },
     ],
     components: {
