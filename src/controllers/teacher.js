@@ -5,10 +5,17 @@ const Joi = require("joi");
 exports.getAllTeachers = async (req, res) => {
   try {
     const { email, name, department, designation, teacherId } = req.query;
+    const validDepartments = ['CSE', 'BBA', 'MBA', 'LAW', 'PHARMACY', 'ENGLISH'];
+    
+    // Validate department filter if provided
+    if (department && !validDepartments.includes(department)) {
+      return res.status(400).json({ error: 'Department must be one of CSE, BBA, MBA, LAW, PHARMACY, ENGLISH' });
+    }
+    
     const query = {};
     if (email) query.email = { $regex: email, $options: "i" };
     if (name) query.name = { $regex: name, $options: "i" };
-    if (department) query.department = { $regex: department, $options: "i" };
+    if (department) query.department = department;
     if (designation) query.designation = { $regex: designation, $options: "i" };
     if (teacherId) query.teacherId = teacherId;
     const teachers = await Teacher.find(query).select(

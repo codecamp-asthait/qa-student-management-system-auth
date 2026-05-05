@@ -6,10 +6,17 @@ const Joi = require('joi');
 exports.getAllStudents = async (req, res) => {
   try {
     const { email, name, department, registrationId, age } = req.query;
+    const validDepartments = ['CSE', 'BBA', 'MBA', 'LAW', 'PHARMACY', 'ENGLISH'];
+    
+    // Validate department filter if provided
+    if (department && !validDepartments.includes(department)) {
+      return res.status(400).json({ error: 'Department must be one of CSE, BBA, MBA, LAW, PHARMACY, ENGLISH' });
+    }
+    
     const query = {};
     if (email) query.email = { $regex: email, $options: 'i' };
     if (name) query.name = { $regex: name, $options: 'i' };
-    if (department) query.department = { $regex: department, $options: 'i' };
+    if (department) query.department = department;
     if (registrationId) query.registrationId = registrationId;
     if (age) query.age = age;
   const students = await Student.find(query).select('-__v -createdAt -updatedAt');
